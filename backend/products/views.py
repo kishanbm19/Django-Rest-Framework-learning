@@ -5,6 +5,7 @@ from .models import Product
 # Create your views here.
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
 
 class ProductDetailAPIView(generics.RetrieveAPIView):
     queryset=Product.objects.all()
@@ -40,7 +41,17 @@ def alt_view(request):
             return Response({"Product is added" },serializer.data)
         return Response(serializer.errors)
 
+@api_view(['PUT'])
+def updateapiview(request,pk):
+    product=get_object_or_404(Product,pk=pk)
+    serialize=ProductSerializer(product,data=request.data)
+    print(get_object_or_404)
 
+    serialize.is_valid(raise_exception=True)
+    serialize.save()
+    return Response({
+          "message":f"product {pk} is updated","data":serialize.data})
+    
 
 
 
