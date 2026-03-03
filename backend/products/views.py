@@ -1,5 +1,5 @@
 
-from  rest_framework import generics
+from  rest_framework import generics,mixins
 from  .serializer import ProductSerializer
 from .models import Product
 # Create your views here.
@@ -22,10 +22,21 @@ class ProductListCreateView(generics.ListCreateAPIView):
         if content is None:
             content=title
         serializer.save(content=content)
+    
+
+class product_destroy_api_generics(generics.DestroyAPIView):
+    queryset=Product.objects.all()
+    serializer_class=ProductSerializer
 
 class ProductListAPIView(generics.ListAPIView):
     queryset=Product.objects.all()
     serializer_class=ProductSerializer
+
+
+class Product_update_generics(generics.UpdateAPIView):
+    queryset=Product.objects.all()
+    serializer_class=ProductSerializer
+
 @api_view(['GET','POST'])
 def alt_view(request):
     if(request.method=='GET'):
@@ -62,6 +73,42 @@ def deleteapiview(request,pk):
         status=status.HTTP_204_NO_CONTENT
        
     )
+
+
+
+
+# Mixins and generic view
+class Productlist_mixin(
+        mixins.ListModelMixin,
+        mixins.CreateModelMixin,generics.GenericAPIView
+):
+    queryset=Product.objects.all()
+    serializer_class=ProductSerializer
+    def get(self,request):
+        return self.list(request)
+    def post(self,request):
+        return self.create(request)
+    
+
+class ProductDetailMixin(
+        mixins.RetrieveModelMixin,
+        mixins.UpdateModelMixin,
+        mixins.DestroyModelMixin,
+        generics.GenericAPIView
+):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+
+
     
 
 
