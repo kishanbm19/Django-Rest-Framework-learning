@@ -5,5 +5,6 @@ urlpatterns=[
     path('update/<int:pk>/',views.updateapiview),
     path('list/',views.ProductListAPIView.as_view()),
     path('fbv/',views.alt_view),
+    path('delete/<int:pk>/',views.deleteapiview),
 ]
 

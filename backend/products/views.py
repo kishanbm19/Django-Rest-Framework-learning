@@ -6,6 +6,7 @@ from .models import Product
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
+from rest_framework import status
 
 class ProductDetailAPIView(generics.RetrieveAPIView):
     queryset=Product.objects.all()
@@ -51,6 +52,16 @@ def updateapiview(request,pk):
     serialize.save()
     return Response({
           "message":f"product {pk} is updated","data":serialize.data})
+@api_view(['DELETE'])
+def deleteapiview(request,pk):
+    product=get_object_or_404(Product,pk=pk)
+    product.delete()
+    
+    return Response({
+        "message":f"product with id {pk} is deleted"},
+        status=status.HTTP_204_NO_CONTENT
+       
+    )
     
 
 
