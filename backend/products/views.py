@@ -7,6 +7,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework import status
+from rest_framework.reverse import reverse
 
 
 class ProductDetailAPIView(generics.RetrieveAPIView):
@@ -18,6 +19,7 @@ class ProductListCreateView(generics.ListCreateAPIView):
     serializer_class=ProductSerializer
     authentication_classes=[authentication.SessionAuthentication]
     permission_classes=[permissions.DjangoModelPermissions]
+    lookup_field=id
 
     # def perform_create(self,serializer):
     #     print(serializer.validated_data)
@@ -111,6 +113,16 @@ class ProductDetailMixin(
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
+    
+
+
+@api_view(['GET'])
+def api_root(request,format=None):
+    return Response(
+        reverse('product-detail',request=request,format=format),
+        
+
+    )
 
 
 
