@@ -8,6 +8,9 @@ from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.reverse import reverse
+from rest_framework_simplejwt.authentication import JWTAuthentication
+
+
 
 
 class ProductDetailAPIView(generics.RetrieveAPIView):
@@ -17,9 +20,11 @@ class ProductDetailAPIView(generics.RetrieveAPIView):
 class ProductListCreateView(generics.ListCreateAPIView):
     queryset=Product.objects.all()
     serializer_class=ProductSerializer
-    authentication_classes=[authentication.SessionAuthentication]
-    permission_classes=[permissions.DjangoModelPermissions]
-    lookup_field=id
+    authentication_classes = [JWTAuthentication]
+    permission_classes=[permissions.IsAuthenticated]
+
+
+
 
     # def perform_create(self,serializer):
     #     print(serializer.validated_data)
@@ -28,6 +33,12 @@ class ProductListCreateView(generics.ListCreateAPIView):
     #     if content is None:
     #         content=title
     #     serializer.save(content=content)
+    def get_queryset(self):
+        
+        request=self.request
+        print(request.user)
+        return super().get_queryset()
+
     
 
 class product_destroy_api_generics(generics.DestroyAPIView):
@@ -84,7 +95,7 @@ def deleteapiview(request,pk):
 
 
 # Mixins and generic view
-class Productlist_mixin(
+class Productlistcreate_mixin(
         mixins.ListModelMixin,
         mixins.CreateModelMixin,generics.GenericAPIView
 ):

@@ -1,5 +1,7 @@
+
 django
 djangorestframework
 pyyaml
 requests
-django-cors-header
+django-cors-headers
+
