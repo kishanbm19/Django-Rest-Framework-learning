@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 
     # third party packages
     'rest_framework',
+    'django_filters',
 
     # internal apps
     'api',
@@ -82,7 +83,8 @@ REST_FRAMEWORK={
     "PAGE_SIZE":5,
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated"],
-    "DEFAULT AUTHENTICATION_CLASS":('rest_framework_simplejwt.authentication.JWTAuthentication')
+    "DEFAULT AUTHENTICATION_CLASS":('rest_framework_simplejwt.authentication.JWTAuthentication'),
+    "DEFAULT_FILTER_BACKENDS":["django_filters.rest_framework.DjangoFilterBackend"]
     
 }
 
